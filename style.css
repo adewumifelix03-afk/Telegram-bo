@@ -1,0 +1,406 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #090909;
+  --panel: #151515;
+  --gold: #d6ad60;
+  --gold-light: #f0d69c;
+  --white: #fff;
+  --muted: #a5a5a5;
+  --border: #292929;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+.navbar {
+  min-height: 75px;
+  padding: 15px 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--border);
+  background: #0d0d0d;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.logo span,
+.hero h1 span,
+.page-heading h1 span {
+  color: var(--gold);
+}
+
+.navbar nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 23px;
+}
+
+.navbar nav a {
+  color: #ccc;
+  font-size: 13px;
+  transition: .25s;
+}
+
+.navbar nav a:hover {
+  color: var(--gold);
+}
+
+.nav-button {
+  border: 1px solid var(--gold);
+  padding: 9px 18px;
+  border-radius: 5px;
+}
+
+.hero {
+  min-height: 570px;
+  padding: 110px 8%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 80% 30%, #49361d55, transparent 45%),
+    linear-gradient(120deg, #0b0b0b, #17130d);
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  margin-bottom: 17px;
+}
+
+.hero h1,
+.page-heading h1 {
+  font-size: clamp(36px, 7vw, 65px);
+  line-height: 1.12;
+  letter-spacing: -2px;
+  max-width: 800px;
+}
+
+.hero-description {
+  color: var(--muted);
+  max-width: 560px;
+  margin: 22px 0 30px;
+  font-size: 16px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 13px;
+}
+
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 21px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  transition: .25s;
+}
+
+.btn-primary {
+  background: var(--gold);
+  color: #17120a;
+}
+
+.btn-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  border-color: #656565;
+  background: transparent;
+  color: white;
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  padding: 55px 7%;
+}
+
+.feature-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 27px;
+  transition: .3s;
+}
+
+.feature-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-5px);
+}
+
+.feature-card h2 {
+  color: var(--gold);
+  font-size: 29px;
+  margin-bottom: 17px;
+}
+
+.feature-card h3 {
+  margin-bottom: 10px;
+}
+
+.feature-card p,
+.callout p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.callout {
+  margin: 20px 7% 65px;
+  padding: 45px;
+  border: 1px solid #604b2a;
+  border-radius: 12px;
+  background: linear-gradient(110deg, #1c1710, #101010);
+}
+
+.callout h2 {
+  font-size: 29px;
+  margin-bottom: 10px;
+}
+
+.callout .btn {
+  margin-top: 20px;
+}
+
+.page-container {
+  width: 86%;
+  max-width: 1100px;
+  margin: auto;
+  min-height: 65vh;
+  padding: 65px 0;
+}
+
+.page-heading {
+  margin-bottom: 35px;
+}
+
+.page-heading h1 {
+  font-size: clamp(32px, 5vw, 49px);
+}
+
+.page-heading p:not(.eyebrow) {
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.search-panel,
+.form-card,
+.dashboard-welcome {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 25px;
+  border-radius: 10px;
+  margin-bottom: 28px;
+}
+
+.search-panel {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.search-panel input {
+  flex: 2;
+}
+
+.search-panel select {
+  flex: 1;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid #373737;
+  border-radius: 5px;
+  background: #101010;
+  color: white;
+  outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gold);
+}
+
+.form-card {
+  max-width: 680px;
+}
+
+.form-card label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 19px 0 8px;
+}
+
+.form-card .btn {
+  margin-top: 23px;
+}
+
+.form-hint,
+.back-link {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 25px;
+}
+
+.jobs-section,
+.dashboard-section {
+  margin-top: 45px;
+}
+
+.section-heading {
+  margin-bottom: 20px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.job-details,
+.dashboard-section > div {
+  background: var(--panel);
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.auth-container {
+  max-width: 720px;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.auth-tabs button {
+  flex: 1;
+}
+
+.auth-tabs button[aria-pressed="true"] {
+  background: var(--gold);
+  color: #17120a;
+}
+
+.dashboard-welcome h2 {
+  color: var(--gold);
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 35px 7%;
+  text-align: center;
+  background: #0d0d0d;
+}
+
+footer p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+#auth-message,
+#application-message,
+#post-job-message {
+  margin-top: 15px;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .navbar nav {
+    gap: 13px;
+  }
+
+  .navbar nav a {
+    font-size: 12px;
+  }
+
+  .hero {
+    min-height: 480px;
+    padding: 75px 7%;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    padding: 30px 7%;
+  }
+
+  .page-container {
+    width: 90%;
+    padding: 45px 0;
+  }
+
+  .callout {
+    padding: 28px;
+    margin: 15px 5% 45px;
+  }
+
+  .search-panel {
+    flex-direction: column;
+  }
+
+  .form-card {
+    padding: 19px;
+  }
+}
