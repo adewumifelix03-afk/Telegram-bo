@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Job | TimelessDL HD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html" class="logo">TIMELESS<span>DL</span> HD</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="jobs.html">Find Jobs</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="login.html" class="nav-button">Sign In</a>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <section class="page-heading">
+      <p class="eyebrow">FOR EMPLOYERS</p>
+      <h1>Post a <span>vacancy.</span></h1>
+      <p>Reach potential candidates through TimelessDL HD.</p>
+    </section>
+
+    <form id="post-job-form" class="form-card">
+      <label for="job-title">Job title</label>
+      <input id="job-title" required placeholder="e.g. Graphic Designer">
+
+      <label for="company-name">Company name</label>
+      <input id="company-name" required placeholder="Enter company name">
+
+      <label for="job-category">Category</label>
+      <select id="job-category" required>
+        <option value="">Choose category</option>
+        <option>Technology</option>
+        <option>Business</option>
+        <option>Education</option>
+        <option>Design</option>
+        <option>Sales</option>
+        <option>Other</option>
+      </select>
+
+      <label for="job-type">Employment type</label>
+      <select id="job-type" required>
+        <option value="">Choose type</option>
+        <option>Full-time</option>
+        <option>Part-time</option>
+        <option>Contract</option>
+        <option>Remote</option>
+        <option>Internship</option>
+      </select>
+
+      <label for="job-location">Location</label>
+      <input id="job-location" required placeholder="e.g. Lagos or Remote">
+
+      <label for="job-salary">Salary (optional)</label>
+      <input id="job-salary" placeholder="e.g. ₦100,000 monthly">
+
+      <label for="job-description">Job description</label>
+      <textarea id="job-description" rows="7" required placeholder="Describe the role, responsibilities and qualifications..."></textarea>
+
+      <label for="application-note">Additional application instructions (optional)</label>
+      <textarea id="application-note" rows="3" placeholder="Add any useful instructions..."></textarea>
+
+      <button type="submit" class="btn btn-primary">Submit Vacancy for Review →</button>
+      <p id="post-job-message" role="status"></p>
+    </form>
+  </main>
+
+  <footer>
+    <a href="index.html" class="logo">TIMELESS<span>DL</span> HD</a>
+    <p>Connecting opportunities with people.</p>
+    <p>© 2026 TimelessDL HD. All rights reserved.</p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
