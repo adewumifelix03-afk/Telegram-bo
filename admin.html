@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TDL Market | Admin Dashboard</title>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101010;color:#fff;font-family:Arial,sans-serif}
+header{background:#1b1b1b;padding:20px;border-bottom:2px solid #d6a52c}
+header h2{margin:0;color:#e5b83e}
+header p{color:#aaa;margin-bottom:0}
+main{padding:18px;max-width:1100px;margin:auto}
+h2,h3{color:#e5b83e}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat,.panel{background:#1c1c1c;padding:17px;border-radius:12px;margin-bottom:15px}
+.stat strong{display:block;font-size:26px;margin-top:8px}
+button{background:#d6a52c;border:0;padding:10px 14px;border-radius:7px;font-weight:bold;cursor:pointer;margin:4px}
+.reject{background:#a83232;color:white}
+.logout{background:#333;color:white}
+.item{background:#292929;padding:14px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere}
+.item p{color:#ccc;font-size:14px;line-height:1.5}
+small{color:#aaa}
+#message{padding:12px;color:#e5b83e}
+@media(min-width:650px){.stats{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+<h2>TDL MARKET</h2>
+<p>Administrator Control Centre</p>
+</header>
+
+<main>
+<div id="message">Checking administrator access...</div>
+
+<div id="dashboard" hidden>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h2>Dashboard Overview</h2>
+<button class="logout" id="logout">Log out</button>
+</div>
+
+<div class="stats">
+<div class="stat">Registered users<strong id="userCount">0</strong></div>
+<div class="stat">Total jobs<strong id="jobCount">0</strong></div>
+<div class="stat">Pending jobs<strong id="pendingCount">0</strong></div>
+<div class="stat">Applications<strong id="applicationCount">0</strong></div>
+</div>
+
+<section class="panel">
+<h3>Job Management</h3>
+<div id="jobs">Loading jobs...</div>
+</section>
+
+<section class="panel">
+<h3>Registered Users</h3>
+<div id="users">Loading users...</div>
+</section>
+
+<section class="panel">
+<h3>Applications</h3>
+<div id="applications">Loading applications...</div>
+</section>
+</div>
+</main>
+
+<script>
+const db = window.supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_ANON_KEY
+);
+
+const message = document.getElementById("message");
+const dashboard = document.getElementById("dashboard");
+
+function showError(error) {
+  message.textContent = "Error: " + error.message;
+}
+
+async function start() {
+  const {data:{user},error} = await db.auth.getUser();
+
+  if(error) return showError(error);
+  if(!user) {
+    message.textContent = "Please log in to your administrator account first.";
+    return;
+  }
+
+  const {data:admin,error:adminError} = await db
+    .from("admin_users")
+    .select("user_id")
+    .eq("user_id",user.id)
+    .maybeSingle();
+
+  if(adminError) return showError(adminError);
+
+  if(!admin) {
+    message.textContent = "Access denied. This account is not an administrator.";
+    return;
+  }
+
+  message.textContent = "Administrator access verified.";
+  dashboard.hidden = false;
+  await loadDashboard();
+}
+
+async function loadDashboard() {
+  const [users,jobs,applications] = await Promise.all([
+    db.from("profiles").select("id,email,display_name,account_type,created_at"),
+    db.from("jobs").select("*").order("created_at",{ascending:false}),
+    db.from("applications").select("*").order("created_at",{ascending:false})
+  ]);
+
+  if(users.error) return showError(users.error);
+  if(jobs.error) return showError(jobs.error);
+  if(applications.error) return showError(applications.error);
+
+  document.getElementById("userCount").textContent = users.data.length;
+  document.getElementById("jobCount").textContent = jobs.data.length;
+  document.getElementById("pendingCount").textContent =
+    jobs.data.filter(j=>j.status==="pending").length;
+  document.getElementById("applicationCount").textContent =
+    applications.data.length;
+
+  document.getElementById("jobs").innerHTML = jobs.data.length
+    ? jobs.data.map(j=>`
+      <div class="item">
+        <strong>${escapeHTML(j.title)}</strong>
+        <p>${escapeHTML(j.company)} · ${escapeHTML(j.location)}</p>
+        <p>Status: <strong>${escapeHTML(j.status)}</strong></p>
+        ${j.status==="pending" ? `
+          <button onclick="changeJobStatus('${j.id}','approved')">Approve</button>
+          <button class="reject" onclick="changeJobStatus('${j.id}','rejected')">Reject</button>
+        ` : ""}
+      </div>
+    `).join("")
+    : "No jobs submitted yet.";
+
+  document.getElementById("users").innerHTML = users.data.length
+    ? users.data.map(u=>`
+      <div class="item">
+        <strong>${escapeHTML(u.display_name || "Unnamed user")}</strong>
+        <p>Email: ${escapeHTML(u.email || "Not provided")}</p>
+        <p>Account type: ${escapeHTML(u.account_type || "Not specified")}</p>
+        <small>Registered: ${escapeHTML(u.created_at || "")}</small>
+      </div>
+    `).join("")
+    : "No registered users found.";
+
+  document.getElementById("applications").innerHTML =
+    applications.data.length
+    ? applications.data.map(a=>`
+      <div class="item">
+        <strong>Application</strong>
+        <p>Applicant: ${escapeHTML(a.applicant_name)}</p>
+        <p>Phone: ${escapeHTML(a.phone)}</p>
+        <p>Status: ${escapeHTML(a.status)}</p>
+        <small>Submitted: ${escapeHTML(a.created_at)}</small>
+      </div>
+    `).join("")
+    : "No applications found.";
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  })[c]);
+}
+
+async function changeJobStatus(id,status) {
+  if(!confirm("Are you sure you want to "+status+" this job?")) return;
+
+  const {error} = await db
+    .from("jobs")
+    .update({status})
+    .eq("id",id);
+
+  if(error) {
+    alert("Could not update job: "+error.message);
+    return;
+  }
+
+  alert("Job "+status+" successfully.");
+  await loadDashboard();
+}
+
+document.getElementById("logout").addEventListener("click",async()=>{
+  await db.auth.signOut();
+  window.location.href="login.html";
+});
+
+start();
+</script>
+</body>
+</html>
